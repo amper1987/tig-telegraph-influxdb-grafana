@@ -1,4 +1,17 @@
 services:
+  
+  
+  # =========================
+  # PYTHON MQTT BRIDGE
+  # =========================
+  mqtt-bridge:
+    build: ./mqtt-bridge
+    container_name: mqtt-bridge
+    restart: unless-stopped
+    networks:
+    - iot-net
+  
+  
   influxdb3-core:
     container_name: influxdb3-core
     image: influxdb:3-core
@@ -54,3 +67,7 @@ services:
 volumes:
   influxdb_data:
   grafana_data:
+
+networks:
+  iot-net:
+    driver: bridge
