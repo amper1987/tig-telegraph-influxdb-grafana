@@ -40,7 +40,7 @@ def on_message(client, userdata, msg):
         # =========================
         # DEVICE TELEMETRY (MessagePack)
         # =========================
-        if msg_type == "cbor":
+        if msg_type == "msgpack":
             data = msgpack.unpackb(msg.payload, raw=False)
             print("MessagePack decoded:", data)
 
