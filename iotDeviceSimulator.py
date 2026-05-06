@@ -100,7 +100,7 @@ def main():
         while True:
             for i in range(NUM_DEVICES):
                 device_id = BASE_ID + i
-                topic = f"iot/{device_id}/mo/cbor"
+                topic = f"iot/{device_id}/mo/msgpack"
 
                 cfg = device_config[device_id]
                 payload = {}
