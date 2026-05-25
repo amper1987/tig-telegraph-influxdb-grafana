@@ -1,6 +1,5 @@
 services:
-  
-  
+
   # =========================
   # PYTHON MQTT BRIDGE
   # =========================
@@ -8,10 +7,8 @@ services:
     build: ./mqtt-bridge
     container_name: mqtt-bridge
     restart: unless-stopped
-    networks:
-    - iot-net
-  
-  
+
+
   influxdb3-core:
     container_name: influxdb3-core
     image: influxdb:3-core
@@ -32,13 +29,13 @@ services:
       retries: 3
     restart: unless-stopped
 
+
   telegraf:
     container_name: telegraf
     image: telegraf
     depends_on:
       influxdb3-core:
         condition: service_healthy
-    # Optionally, you can switch to depend on influxdb3-enterprise if using that
     environment:
       - INFLUXDB_HOST=${INFLUXDB_HOST}
       - INFLUXDB_TOKEN=${INFLUXDB_TOKEN}
@@ -49,6 +46,7 @@ services:
     volumes:
       - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
     restart: unless-stopped
+
 
   grafana:
     image: grafana/grafana
@@ -61,13 +59,15 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
     depends_on:
       - influxdb3-core
-    # Or switch to influxdb3-enterprise as needed
     restart: unless-stopped
+
 
 volumes:
   influxdb_data:
   grafana_data:
 
+
 networks:
-  iot-net:
+  default:
+    name: iot-net
     driver: bridge
