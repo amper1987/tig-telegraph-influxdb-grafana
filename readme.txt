@@ -30,3 +30,8 @@ sudo apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
 docker --version
 docker compose version
 docker compose up -d
+
+SELECT rpm, time
+FROM mqtt_consumer
+WHERE topic = 'iot/${TERMINAL}/mt/msg'
+AND $__timeFilter(time);

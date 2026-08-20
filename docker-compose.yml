@@ -7,13 +7,21 @@ services:
     build: ./mqtt-bridge
     container_name: mqtt-bridge
     restart: unless-stopped
+    networks:
+      - iot-net
 
 
   influxdb3-core:
     container_name: influxdb3-core
     image: influxdb:3-core
+    
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+
     ports:
-      - 8181:8181
+      - "8181:8181"
     command:
       - influxdb3
       - serve
@@ -28,6 +36,8 @@ services:
       timeout: 10s
       retries: 3
     restart: unless-stopped
+    networks:
+      - iot-net
 
 
   telegraf:
@@ -46,9 +56,12 @@ services:
     volumes:
       - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
     restart: unless-stopped
+    networks:
+      - iot-net
 
 
   grafana:
+    container_name: grafana
     image: grafana/grafana
     ports:
       - "${GRAFANA_PORT}:3000"
@@ -60,14 +73,14 @@ services:
     depends_on:
       - influxdb3-core
     restart: unless-stopped
-
-
+    networks:
+      - iot-net
+      
 volumes:
   influxdb_data:
   grafana_data:
 
 
 networks:
-  default:
-    name: iot-net
+  iot-net:
     driver: bridge
